@@ -43,37 +43,27 @@ public class SoilStructureIdentifier {
     // check to see if there is a path for water to pass throught the soil
     public void isPathThroughSoil() {
         for(int i=nSize; i < soil_structure.length; i++) {
-            switch (i % nSize) {
-                case 0: { // left-most soil, don't check left
-                    if(soil_structure[i+1] == 1) { // check right
-                        qUnion.union(i, i+1);
-                    }
-                    else if(soil_structure[i-nSize] == 1) { // check above
-                        qUnion.union(i, i-nSize);
-                    }
-                    break;
-                }
-                case (nSize-1): { // right-most soil, don't check right
-                    if(soil_structure[i-1] == 1) { // check left
-                        qUnion.union(i, i-1);
-                    }
-                    else if(soil_structure[i-nSize] == 1) { // check above
-                        qUnion.union(i, i-nSize);
-                    }
-                    break;
-                }
-                default: {
-                    if(soil_structure[i-1] == 1) { // check left
-                        qUnion.union(i, i-1);
-                    }
-                    if(soil_structure[i+1] == 1) { // check right
-                        qUnion.union(i, i+1);
-                    }
-                    else if(soil_structure[i-nSize] == 1) { // check above
-                        qUnion.union(i, i-nSize);
-                    }
-                    break;
-                }
+            // check above
+            if(soil_structure[i-nSize] == 1) {
+                qUnion.union(i, i-nSize);
+            }
+            // left-most soil, check right only
+            if(i % nSize == 0 && soil_structure[i+1] == 1) {
+                qUnion.union(i, i+1);
+                continue;
+            }
+            // right-most soil, check left only
+            else if(i % nSize == nSize - 1 && soil_structure[i-1] == 1) {
+                qUnion.union(i, i-1);
+                break;
+            }
+            // check both left and right
+            else {
+                if(soil_structure[i+1] == 1) // check right
+                    qUnion.union(i, i+1);
+                if(soil_structure[i-1] == 1) // check left
+                    qUnion.union(i, i-1);
+                break;
             }
         }
         qUnion.find(22);
