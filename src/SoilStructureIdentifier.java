@@ -2,8 +2,7 @@ import edu.princeton.cs.algs4.In;
 
 public class SoilStructureIdentifier {
     public static void main(String[] args) {
-        SoilStructureIdentifier s = new SoilStructureIdentifier();
-        s.soilStructureFromTextFile("test_data.txt");
+
     }
     // constructor
     public SoilStructureIdentifier() {
@@ -18,9 +17,9 @@ public class SoilStructureIdentifier {
         while(in.hasNextLine()) {
             soil_structure += in.readLine();
         }
-
         int[] soil_structure_array = new int[soil_structure.length()];
         int iter = 0;
+        // convert the String into an int array
         for(String s: soil_structure.split("")) {
             soil_structure_array[iter++] = Integer.parseInt(s);
         }
