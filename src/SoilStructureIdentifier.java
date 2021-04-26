@@ -71,6 +71,9 @@ public class SoilStructureIdentifier {
                 qUnion.union(i+nSize, i);
             }
         }
+        // iterate through the last row of soil. If any values in qUnion are between 0 and nSize,
+        // that means the corresponding soil node is connected to a root node at the top of the
+        // soil structure.
         for(int k=soil_structure.length-nSize; k < soil_structure.length; k++) {
             if(qUnion.find(k) < nSize)
                 return true;
