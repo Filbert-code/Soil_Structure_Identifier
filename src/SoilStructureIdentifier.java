@@ -4,13 +4,13 @@ public class SoilStructureIdentifier {
 
     // For Testing:
     public static void main(String[] args) {
-        SoilStructureIdentifier s = new SoilStructureIdentifier("test_data.txt");
+        SoilStructureIdentifier s = new SoilStructureIdentifier("test_data_3.txt");
         System.out.println(s.isPathThroughSoil());
     }
 
     // member variables
     private final int[] soil_structure;
-    private final QuickUnion qUnion;
+    private final WeightedQuickUnion qUnion;
     private final int nSize; // 'n' of the n x n soil matrix
 
     // constructor
@@ -18,7 +18,7 @@ public class SoilStructureIdentifier {
         // convert String from text file to an int-array
         soil_structure = soilStructureFromTextFile(textFileName);
         // initialize quickUnion instance
-        qUnion = new QuickUnion(soil_structure.length);
+        qUnion = new WeightedQuickUnion(soil_structure.length);
         nSize = (int) Math.sqrt(soil_structure.length);
     }
 
@@ -47,17 +47,13 @@ public class SoilStructureIdentifier {
                 continue;
             // left-most soil, check right only
             if(i % nSize == 0) {
-                if (soil_structure[i+nSize] == 0 && soil_structure[i+1] == 0)
-                    continue;
-                else if(soil_structure[i+1] == 1)
-                    qUnion.union(i+1, i);
+                if(soil_structure[i+1] == 1)
+                    qUnion.union(i, i+1);
             }
             // right-most soil, check left only
             else if(i % nSize == nSize - 1) {
-                if (i > nSize && soil_structure[i-nSize] == 0 && soil_structure[i-1] == 0)
-                    continue;
-                else if(soil_structure[i-1] == 1)
-                    qUnion.union(i-1, i);
+                if(soil_structure[i-1] == 1)
+                    qUnion.union(i, i-1);
             }
             // check both left and right
             else {
@@ -68,16 +64,22 @@ public class SoilStructureIdentifier {
             }
             // check below
             if(soil_structure[i+nSize] == 1) {
-                qUnion.union(i+nSize, i);
+                qUnion.union(i, i+nSize);
             }
         }
-        // iterate through the last row of soil. If any values in qUnion are between 0 and nSize,
-        // that means the corresponding soil node is connected to a root node at the top of the
-        // soil structure.
+        // checks if the soil structure allows water to drain
+        return bottomSoilConnectedToTop();
+    }
+
+    // iterate through the last row of soil. If any values in qUnion are between 0 and nSize,
+    // that means the corresponding soil node is connected to a root node at the top of the
+    // soil structure.
+    public boolean bottomSoilConnectedToTop() {
         for(int k=soil_structure.length-nSize; k < soil_structure.length; k++) {
             if(qUnion.find(k) < nSize)
                 return true;
         }
         return false;
     }
+
 }
