@@ -40,33 +40,34 @@ public class SoilStructureIdentifier {
         return soil_structure_array;
     }
 
-    // check to see if there is a path for water to pass throught the soil
+    // check to see if there is a path for water to pass through the soil
     public void isPathThroughSoil() {
-        for(int i=nSize; i < soil_structure.length; i++) {
-            // check above
-            if(soil_structure[i-nSize] == 1) {
-                qUnion.union(i, i-nSize);
+        for(int i=0; i < soil_structure.length-nSize; i++) {
+            if(soil_structure[i] == 0)
+                continue;
+            // check below
+            if(soil_structure[i+nSize] == 1) {
+                qUnion.union(i+nSize, i);
             }
             // left-most soil, check right only
-            if(i % nSize == 0 && soil_structure[i+1] == 1) {
-                qUnion.union(i, i+1);
-                continue;
+            if(i % nSize == 0) {
+                if(soil_structure[i+1] == 1)
+                    qUnion.union(i+1, i);
             }
             // right-most soil, check left only
-            else if(i % nSize == nSize - 1 && soil_structure[i-1] == 1) {
-                qUnion.union(i, i-1);
-                break;
+            else if(i % nSize == nSize - 1) {
+                if(soil_structure[i-1] == 1)
+                    qUnion.union(i-1, i);
             }
             // check both left and right
             else {
                 if(soil_structure[i+1] == 1) // check right
-                    qUnion.union(i, i+1);
+                    qUnion.union(i+1, i);
                 if(soil_structure[i-1] == 1) // check left
-                    qUnion.union(i, i-1);
-                break;
+                    qUnion.union(i-1, i);
             }
         }
-        qUnion.find(22);
+        System.out.println(qUnion.find(22));
         System.out.println();
     }
 }
