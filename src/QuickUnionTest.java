@@ -17,15 +17,4 @@ class QuickUnionTest {
 
         assertEquals(expected, actual);
     }
-
-    @Test
-    void testSoilStructureFromTextFile() {
-        SoilStructureIdentifier s = new SoilStructureIdentifier();
-        int[] sStructure = s.soilStructureFromTextFile("test_data.txt");
-
-        int actual = sStructure.length;
-        int expected = 25;
-
-        assertEquals(actual, expected);
-    }
 }
