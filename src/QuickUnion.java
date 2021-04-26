@@ -54,13 +54,13 @@ public class QuickUnion implements UnionFind {
 		ArrayList<Integer> indices_visited = new ArrayList<>();
 		while(id[p] != p) {
 			p = id[p];
-			indices_visited.add(p);
+//			indices_visited.add(p);
 		}
 		// point the nodes visited directly at the root index. This is how path
 		// compression is being implemented.
-		for(int i=0; i<indices_visited.size(); i++) {
-			id[i] = p;
-		}
+//		for(int i=0; i<indices_visited.size(); i++) {
+//			id[i] = p;
+//		}
 		return p;
 	}
 }

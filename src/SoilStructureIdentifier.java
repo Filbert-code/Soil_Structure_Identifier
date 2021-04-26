@@ -5,7 +5,7 @@ public class SoilStructureIdentifier {
     // For Testing:
     public static void main(String[] args) {
         SoilStructureIdentifier s = new SoilStructureIdentifier("test_data.txt");
-        s.isPathThroughSoil();
+        System.out.println(s.isPathThroughSoil());
     }
 
     // member variables
@@ -41,22 +41,22 @@ public class SoilStructureIdentifier {
     }
 
     // check to see if there is a path for water to pass through the soil
-    public void isPathThroughSoil() {
+    public boolean isPathThroughSoil() {
         for(int i=0; i < soil_structure.length-nSize; i++) {
             if(soil_structure[i] == 0)
                 continue;
-            // check below
-            if(soil_structure[i+nSize] == 1) {
-                qUnion.union(i+nSize, i);
-            }
             // left-most soil, check right only
             if(i % nSize == 0) {
-                if(soil_structure[i+1] == 1)
+                if (soil_structure[i+nSize] == 0 && soil_structure[i+1] == 0)
+                    continue;
+                else if(soil_structure[i+1] == 1)
                     qUnion.union(i+1, i);
             }
             // right-most soil, check left only
             else if(i % nSize == nSize - 1) {
-                if(soil_structure[i-1] == 1)
+                if (i > nSize && soil_structure[i-nSize] == 0 && soil_structure[i-1] == 0)
+                    continue;
+                else if(soil_structure[i-1] == 1)
                     qUnion.union(i-1, i);
             }
             // check both left and right
@@ -66,8 +66,15 @@ public class SoilStructureIdentifier {
                 if(soil_structure[i-1] == 1) // check left
                     qUnion.union(i-1, i);
             }
+            // check below
+            if(soil_structure[i+nSize] == 1) {
+                qUnion.union(i+nSize, i);
+            }
         }
-        System.out.println(qUnion.find(22));
-        System.out.println();
+        for(int k=soil_structure.length-nSize; k < soil_structure.length; k++) {
+            if(qUnion.find(k) < nSize)
+                return true;
+        }
+        return false;
     }
 }
