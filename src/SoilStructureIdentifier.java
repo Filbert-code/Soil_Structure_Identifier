@@ -46,33 +46,36 @@ public class SoilStructureIdentifier {
             switch (i % width) {
                 case 0: { // left-most soil, don't check left
                     if(soil_structure[i+1] == 1) { // check right
-                        // ToDo: make a connection
+                        qUnion.union(i, i+1);
                     }
-                    else if(soil_structure[i+width] == 1) {
-                        // ToDo: make a connection
+                    else if(soil_structure[i-width] == 1) { // check above
+                        qUnion.union(i, i-width);
                     }
                     break;
                 }
                 case 3: { // right-most soil, don't check right
                     if(soil_structure[i-1] == 1) { // check left
-                        // ToDo: make a connection
+                        qUnion.union(i, i-1);
                     }
-                    else if(soil_structure[i+width] == 1) {
-                        // ToDo: make a connection
+                    else if(soil_structure[i-width] == 1) { // check above
+                        qUnion.union(i, i-width);
                     }
                     break;
                 }
                 default: {
-
+                    if(soil_structure[i-1] == 1) { // check left
+                        qUnion.union(i, i-1);
+                    }
+                    if(soil_structure[i+1] == 1) { // check right
+                        qUnion.union(i, i+1);
+                    }
+                    else if(soil_structure[i-width] == 1) { // check above
+                        qUnion.union(i, i-width);
+                    }
                     break;
                 }
             }
-            if(i % width == 0) // left-most soil, don't check left
-            if(i % width == 3) // right-most soil, don't check right
-            if(soil_structure[i-1] == 1) // check left
-            if(soil_structure[i+1] == 1) // check right
-            if(soil_structure[i+width] == 1) // check above
-
         }
+
     }
 }
