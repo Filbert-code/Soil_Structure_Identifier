@@ -5,19 +5,21 @@ public class SoilStructureIdentifier {
     // For Testing:
     public static void main(String[] args) {
         SoilStructureIdentifier s = new SoilStructureIdentifier("test_data.txt");
-
+        s.isPathThroughSoil();
     }
 
     // member variables
-    private int[] soil_structure;
-    private QuickUnion qUnion;
+    private final int[] soil_structure;
+    private final QuickUnion qUnion;
+    private final int nSize; // 'n' of the n x n soil matrix
 
     // constructor
     public SoilStructureIdentifier(String textFileName) {
         // convert String from text file to an int-array
-        int[] soil_structure = soilStructureFromTextFile(textFileName);
+        soil_structure = soilStructureFromTextFile(textFileName);
         // initialize quickUnion instance
         qUnion = new QuickUnion(soil_structure.length);
+        nSize = (int) Math.sqrt(soil_structure.length);
     }
 
     // read data from text file
@@ -40,25 +42,23 @@ public class SoilStructureIdentifier {
 
     // check to see if there is a path for water to pass throught the soil
     public void isPathThroughSoil() {
-        // 'n' of the n x n soil matrix
-        int width = (int) Math.sqrt(soil_structure.length);
-        for(int i=width; i < soil_structure.length; i++) {
-            switch (i % width) {
+        for(int i=nSize; i < soil_structure.length; i++) {
+            switch (i % nSize) {
                 case 0: { // left-most soil, don't check left
                     if(soil_structure[i+1] == 1) { // check right
                         qUnion.union(i, i+1);
                     }
-                    else if(soil_structure[i-width] == 1) { // check above
-                        qUnion.union(i, i-width);
+                    else if(soil_structure[i-nSize] == 1) { // check above
+                        qUnion.union(i, i-nSize);
                     }
                     break;
                 }
-                case 3: { // right-most soil, don't check right
+                case (nSize-1): { // right-most soil, don't check right
                     if(soil_structure[i-1] == 1) { // check left
                         qUnion.union(i, i-1);
                     }
-                    else if(soil_structure[i-width] == 1) { // check above
-                        qUnion.union(i, i-width);
+                    else if(soil_structure[i-nSize] == 1) { // check above
+                        qUnion.union(i, i-nSize);
                     }
                     break;
                 }
@@ -69,13 +69,14 @@ public class SoilStructureIdentifier {
                     if(soil_structure[i+1] == 1) { // check right
                         qUnion.union(i, i+1);
                     }
-                    else if(soil_structure[i-width] == 1) { // check above
-                        qUnion.union(i, i-width);
+                    else if(soil_structure[i-nSize] == 1) { // check above
+                        qUnion.union(i, i-nSize);
                     }
                     break;
                 }
             }
         }
-
+        qUnion.find(22);
+        System.out.println();
     }
 }
