@@ -2,10 +2,14 @@ import edu.princeton.cs.algs4.In;
 
 public class SoilStructureIdentifier {
 
-    // For Testing:
+    // testing the SoilStructureIdentifier class with test files located in the directory:
     public static void main(String[] args) {
-        SoilStructureIdentifier s = new SoilStructureIdentifier("test_data_3.txt");
-        System.out.println(s.isPathThroughSoil());
+        SoilStructureIdentifier s1 = new SoilStructureIdentifier("test_data.txt");
+        SoilStructureIdentifier s2 = new SoilStructureIdentifier("test_data_2.txt");
+        SoilStructureIdentifier s3 = new SoilStructureIdentifier("test_data_3.txt");
+        System.out.println("Soil structure 1 allows water to drain: " + s1.isPathThroughSoil());
+        System.out.println("Soil structure 2 allows water to drain: " + s2.isPathThroughSoil());
+        System.out.println("Soil structure 3 allows water to drain: " + s3.isPathThroughSoil());
     }
 
     // member variables
